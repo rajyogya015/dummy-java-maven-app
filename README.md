@@ -1,2 +1,3 @@
-# dummy-java-maven-app
-Dummy Java WEB app
+# SpringRestDemo
+
+Explains how to create a basic SpringREST project.
