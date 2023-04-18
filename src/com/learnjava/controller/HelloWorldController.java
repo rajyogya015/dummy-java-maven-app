@@ -10,7 +10,7 @@ public class HelloWorldController {
 	public String helloWorld() {
  
 		System.out.println("In HelloWorldController");
-		String message = "Hello World";
+		String message = "Hello Yogya !!";
 		return message;
 	}
 }
