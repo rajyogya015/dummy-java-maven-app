@@ -144,7 +144,9 @@ filename: Artifacts package Name
 
 def artifactUpload(filepath,filename){
     try{
-        curl -urajyogya015@gmail.com:"${jfcred}" -T "$filepath" "https://rajyogya015.jfrog.io/artifactory/javabuildpkg-generic-local/$filename"
+        sh """
+            curl -urajyogya015@gmail.com:"${jfcred}" -T "$filepath" "https://rajyogya015.jfrog.io/artifactory/javabuildpkg-generic-local/$filename"
+            """
     }
    catch(Exception e){
         echo "Failed Uploading artifacts $filename ..with error e"
@@ -160,7 +162,8 @@ filename: Artifacts package Name
 def downloadArtifacts(filename, downloadPath){
     try{
         
-        curl -urajyogya015@gmail.com:"${jfcred}" -L -O "https://rajyogya015.jfrog.io/artifactory/javabuildpkg-generic-local$filename"
+        sh """
+        curl -urajyogya015@gmail.com:"${jfcred}" -L -O "https://rajyogya015.jfrog.io/artifactory/javabuildpkg-generic-local$filename" """
     }
     catch(Exception e){
         echo "Download of artifacts failed with error" 
