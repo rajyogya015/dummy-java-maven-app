@@ -3,10 +3,10 @@ node {
     def gitCredentials = "GitHUbToken"
     def repoUrl = "https://${gitCredentials}@github.com/rajyogya015/dummy-java-maven-app.git"
     def tomcatAppIp = "172.31.95.157"
-    def server = 
+    def server
     def rtmaven
     def buildInfo
-    env.jfpasswd = ""
+
 try{
   if(env.BRANCH_NAME.startsWith('PR-') && env.CHANGE_ID != null){
     stage('Checkout') {
@@ -50,8 +50,9 @@ try{
     }
     stage('CodeScanXray'){
        /*withCredentials([usernamePassword(credentialsId: '', passwordVariable: 'jfpasswd', usernameVariable: 'jfuser')]) {
+        withCredentials([string(credentialsId: '', variable: 'jfcred')]) {
         unstash 'sourcecode'
-        server = Artifactory.server SERVER_ID
+        server = Artifactory.server 'jftrial'
         buildInfo = Artifactory.newBuildInfo()
         buildName: env.JOB_NAME,
         buildNumber: BUILD_NUMBER
@@ -142,7 +143,7 @@ filename: Artifacts package Name
 
 def artifactUpload(filepath,filename){
     try{
-        curl -urajyogya015@gmail.com:"${env.jfpasswd}" -T "$filepath" "https://rajyogya015.jfrog.io/artifactory/javabuildpkg-generic-local/$filename"
+        curl -urajyogya015@gmail.com:"${jfcred}" -T "$filepath" "https://rajyogya015.jfrog.io/artifactory/javabuildpkg-generic-local/$filename"
     }
    catch(Exception e){
         echo "Failed Uploading artifacts $filename ..with error e"
@@ -158,7 +159,7 @@ filename: Artifacts package Name
 def downloadArtifacts(filename, downloadPath){
     try{
         
-        curl -urajyogya015@gmail.com:"${env.jfpasswd}" -L -O "https://rajyogya015.jfrog.io/artifactory/javabuildpkg-generic-local$filename"
+        curl -urajyogya015@gmail.com:"${jfcred}" -L -O "https://rajyogya015.jfrog.io/artifactory/javabuildpkg-generic-local$filename"
     }
     catch(Exception e){
         echo "Download of artifacts failed with error" 
