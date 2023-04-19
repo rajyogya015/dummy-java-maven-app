@@ -77,6 +77,7 @@ try{
                         failBuild    : false
                     )
         }*/
+        echo "Xray Scan execution done"
     }
     stage("Create release"){
         echo "Creating new release and push Tag to GitHub"       
