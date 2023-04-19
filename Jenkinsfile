@@ -85,8 +85,8 @@ try{
     }
     stage('PushArtifactstoJFrog'){
         unstash 'artifacet'
-        env.fpath = (sh returnStdout: true, script: "find ./ -name '*.war' | awk -F '/' '{print \$2\"/\"\$3}'")
-        env.fileName = (sh returnStdout: true, script: "echo ${fpath} | awk -F '/' '{print \$3}'")
+        env.fpath = sh (script: "find ./ -name '*.war' | awk -F '/' '{print \$2\"/\"\$3}'",returnStdout: true).trim()
+        env.fileName = sh (script: "echo ${fpath} | awk -F '/' '{print \$3}'",returnStdout: true).trim()
         artifactUpload("${fpath}", "${fileName}")
     }
     stage('DeployToAppServer'){
