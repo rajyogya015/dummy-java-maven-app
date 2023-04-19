@@ -1,7 +1,9 @@
 node {
     def branchName = env.BRANCH_NAME
     def gitCredentials = "GitHUbToken"
-    def repoUrl = "https://${gitCredentials}@github.com/rajyogya015/dummy-java-maven-app.git"
+    withCredentials([string(credentialsId: 'GitHUbToken', variable: 'gittoken')]) {
+    def repoUrl = "https://${gittoken}@github.com/rajyogya015/dummy-java-maven-app.git"
+    }
     def tomcatAppIp = "172.31.95.157"
     def server
     def rtmaven
@@ -80,8 +82,10 @@ try{
         echo "Xray Scan execution done"
     }
     stage("Create release"){
-        echo "Creating new release and push Tag to GitHub"       
-        createRelease("${repoUrl}")
+        echo "Creating new release and push Tag to GitHub"  
+        
+            createRelease("${repoUrl}", "${gittoken}")
+
     }
     stage('PushArtifactstoJFrog'){
         unstash 'artifacet'
