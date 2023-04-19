@@ -1,7 +1,7 @@
 node {
     def branchName = env.BRANCH_NAME
     def gitCredentials = "GitHUbToken"
-    withCredentials([string(credentialsId: 'GitHUbToken', variable: 'gittoken')]) {
+    withCredentials([usernamePassword(credentialsId: 'GitHUbToken', passwordVariable: 'gittoken', usernameVariable: 'gitUser')]) {
     def repoUrl = "https://${gittoken}@github.com/rajyogya015/dummy-java-maven-app.git"
     }
     def tomcatAppIp = "172.31.95.157"
@@ -51,8 +51,8 @@ try{
         stash includes: 'target/*.war', name: 'artifacet'
     }
     stage('CodeScanXray'){
-       /*withCredentials([usernamePassword(credentialsId: '', passwordVariable: 'jfpasswd', usernameVariable: 'jfuser')]) {
-        withCredentials([string(credentialsId: '', variable: 'jfcred')]) {
+       /*withCredentials([usernamePassword(credentialsId: 'jfcred', passwordVariable: 'jfpasswd', usernameVariable: 'jfuser')]) {
+        withCredentials([string(credentialsId: 'jfcred', variable: 'jfcred')]) {
         unstash 'sourcecode'
         server = Artifactory.server 'jftrial'
         buildInfo = Artifactory.newBuildInfo()
