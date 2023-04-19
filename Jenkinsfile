@@ -85,7 +85,7 @@ try{
     stage("Create release"){
         echo "Creating new release and push Tag to GitHub"  
         
-            createRelease("${repoUrl}", "${gittoken}")
+            //createRelease("${repoUrl}", "${gittoken}")
 
     }
     stage('PushArtifactstoJFrog'){
