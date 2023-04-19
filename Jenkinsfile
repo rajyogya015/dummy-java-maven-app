@@ -32,7 +32,7 @@ try{
         // Execute SOnar Scan
         //unstash sourcecode
         //withSonarQubeEnv('SonarServer') {
-                sh 'mvn clean package sonar:sonar'
+                //sh 'mvn clean package sonar:sonar'
        // }
         sleep 30
         //waitForQualityGate abortPipeline: true
