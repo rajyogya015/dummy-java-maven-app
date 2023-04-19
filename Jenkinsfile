@@ -1,7 +1,10 @@
+//@Maintainer Yogya Raj
 node {
     def branchName = env.BRANCH_NAME
     def gitCredentials = "GitHUbToken"
-    def repoUrl = "https://${gitCredentials}@github.com/rajyogya015/dummy-java-maven-app.git"
+    withCredentials([usernamePassword(credentialsId: 'GitHUbToken', passwordVariable: 'gittoken', usernameVariable: 'gitUser')]) {
+    def repoUrl = "https://${gittoken}@github.com/rajyogya015/dummy-java-maven-app.git"
+    }
     def tomcatAppIp = "172.31.95.157"
     def server
     def rtmaven
@@ -49,8 +52,8 @@ try{
         stash includes: 'target/*.war', name: 'artifacet'
     }
     stage('CodeScanXray'){
-       /*withCredentials([usernamePassword(credentialsId: '', passwordVariable: 'jfpasswd', usernameVariable: 'jfuser')]) {
-        withCredentials([string(credentialsId: '', variable: 'jfcred')]) {
+       /*withCredentials([usernamePassword(credentialsId: 'jfcred', passwordVariable: 'jfpasswd', usernameVariable: 'jfuser')]) {
+        withCredentials([string(credentialsId: 'jfcred', variable: 'jfcred')]) {
         unstash 'sourcecode'
         server = Artifactory.server 'jftrial'
         buildInfo = Artifactory.newBuildInfo()
@@ -80,8 +83,10 @@ try{
         echo "Xray Scan execution done"
     }
     stage("Create release"){
-        echo "Creating new release and push Tag to GitHub"       
-        createRelease("${repoUrl}")
+        echo "Creating new release and push Tag to GitHub"  
+        
+            createRelease("${repoUrl}", "${gittoken}")
+
     }
     stage('PushArtifactstoJFrog'){
         unstash 'artifacet'
