@@ -1,4 +1,4 @@
-//@Maintainer Yogya Raj
+//@Maintainer: Yogya Raj
 node {
     def branchName = env.BRANCH_NAME
     def gitCredentials = "GitHUbToken"
@@ -20,25 +20,25 @@ try{
 
     stage('Build') {
         // Build the project
-        //unstash sourcecode
+        unstash sourcecode
         sh 'mvn package'
     }
 
     stage('Test') {
         // Run tests
         echo "Execute JUnit test as per pom.xml"
-        //unstash sourcecode
-        //sh 'mvn test'
+        unstash sourcecode
+        sh 'mvn test'
     }
 
     stage('Sonar') {
         // Execute SOnar Scan
-        //unstash sourcecode
-        //withSonarQubeEnv('SonarServer') {
-                //sh 'mvn clean package sonar:sonar'
-       // }
+        unstash sourcecode
+        withSonarQubeEnv('SonarServer') {
+                sh 'mvn clean package sonar:sonar'
+        }
         sleep 30
-        //waitForQualityGate abortPipeline: true
+        waitForQualityGate abortPipeline: true
         echo "Sonar execute"
     }
 
@@ -53,7 +53,7 @@ try{
     }
     stage('CodeScanXray'){
         sleep 30
-       /*withCredentials([usernamePassword(credentialsId: 'jfcred', passwordVariable: 'jfpasswd', usernameVariable: 'jfuser')]) {
+
         withCredentials([string(credentialsId: 'jfcred', variable: 'jfcred')]) {
         unstash 'sourcecode'
         server = Artifactory.server 'jftrial'
@@ -80,13 +80,14 @@ try{
                         buildNumber : BUILD_NUMBER,
                         failBuild    : false
                     )
-        }*/
+        }
         echo "Xray Scan execution done"
     }
     stage("Create release"){
         echo "Creating new release and push Tag to GitHub"  
-        sleep 30
-            //createRelease("${repoUrl}", "${gittoken}")
+
+        sleep 30        
+            createRelease("${repoUrl}", "${gittoken}")
 
     }
     stage('PushArtifactstoJFrog'){
