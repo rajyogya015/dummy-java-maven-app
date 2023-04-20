@@ -52,7 +52,8 @@ try{
         stash includes: 'target/*.war', name: 'artifacet'
     }
     stage('CodeScanXray'){
-       
+        sleep 30
+
         withCredentials([string(credentialsId: 'jfcred', variable: 'jfcred')]) {
         unstash 'sourcecode'
         server = Artifactory.server 'jftrial'
@@ -84,24 +85,27 @@ try{
     }
     stage("Create release"){
         echo "Creating new release and push Tag to GitHub"  
-        
+
+        sleep 30        
             createRelease("${repoUrl}", "${gittoken}")
 
     }
     stage('PushArtifactstoJFrog'){
         unstash 'artifacet'
-        env.fpath = sh (script: "find ./ -name '*.war' | awk -F '/' '{print \$2\"/\"\$3}'",returnStdout: true).trim()
-        env.fileName = sh (script: "echo ${fpath} | awk -F '/' '{print \$3}'",returnStdout: true).trim()
-        artifactUpload("${fpath}", "${fileName}")
+        sleep 30
+        //env.fpath = sh (script: "find ./ -name '*.war' | awk -F '/' '{print \$2\"/\"\$3}'",returnStdout: true).trim()
+        //env.fileName = sh (script: "echo ${fpath} | awk -F '/' '{print \$3}'",returnStdout: true).trim()
+        //artifactUpload("${fpath}", "${fileName}")
     }
     stage('DeployToAppServer'){
         //unstash 'artifacet'
         echo "Downloading Artifacts from artifactory"
-        downloadArtifacts("${fileName}", "$WORKSPACE")
+        sleep 30
+        //downloadArtifacts("${fileName}", "$WORKSPACE")
         echo " Deploying to App Server"
-        sh "scp ${WORKSPACE}/${fileName} ubuntu@${tomcatAppIp}:/tmp/"
-        sh "ssh ${tomcatAppIp} sudo cp /tmp/*.war /opt/tomcat/webapps/"
-        sh "ssh ${tomcatAppIp} sudo systemctl restart tomcat"
+        //sh "scp ${WORKSPACE}/${fileName} ubuntu@${tomcatAppIp}:/tmp/"
+        //sh "ssh ${tomcatAppIp} sudo cp /tmp/*.war /opt/tomcat/webapps/"
+        //sh "ssh ${tomcatAppIp} sudo systemctl restart tomcat"
 
         echo "Deployment on Tomcat App completed"
     }
