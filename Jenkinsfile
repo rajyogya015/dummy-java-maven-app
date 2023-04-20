@@ -87,7 +87,7 @@ try{
         echo "Creating new release and push Tag to GitHub"  
 
         sleep 30        
-            createRelease("${repoUrl}", "${gittoken}")
+            //createRelease("${repoUrl}", "${gittoken}")
 
     }
     stage('PushArtifactstoJFrog'){
