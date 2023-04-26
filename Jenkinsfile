@@ -1,4 +1,4 @@
-//@Maintainer: Yogya Raj <>
+//@Maintainer: Yogya Raj
 node {
     def branchName = env.BRANCH_NAME
     def gitCredentials = "GitHUbToken"
